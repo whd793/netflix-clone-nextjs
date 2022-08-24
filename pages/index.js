@@ -8,7 +8,17 @@ import SectionCards from "../components/card/section-cards";
 
 import { getVideos } from "../lib/videos";
 
-export default function Home() {
+export async function getServerSideProps() {
+  const disneyVideos = await getVideos();
+
+  return {
+    props: {
+      disneyVideos,
+    }, // will be passed to the page component as props
+  };
+}
+
+export default function Home({ disneyVideos }) {
   // const disneyVideos = [
   //   {
   //     imgUrl: "/static/clifford.webp",
@@ -20,8 +30,6 @@ export default function Home() {
   //     imgUrl: "/static/clifford.webp",
   //   },
   // ];
-
-  const disneyVideos = getVideos();
 
   return (
     <div className={styles.container}>
