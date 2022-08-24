@@ -6,19 +6,26 @@ import styles from "../styles/Home.module.css";
 import Card from "../components/card/card";
 import SectionCards from "../components/card/section-cards";
 
-import { getVideos } from "../lib/videos";
-
+import { getPopularVideos, getVideos } from "../lib/videos";
 export async function getServerSideProps() {
-  const disneyVideos = await getVideos();
+  const disneyVideos = await getVideos("disney trailer");
+  const productivityVideos = await getVideos("Productivity");
+
+  const travelVideos = await getVideos("indie music");
+  const popularVideos = await getPopularVideos();
+  // const popularVideos = await getVideos();
 
   return {
-    props: {
-      disneyVideos,
-    }, // will be passed to the page component as props
+    props: { disneyVideos, travelVideos, productivityVideos, popularVideos }, // will be passed to the page component as props
   };
 }
 
-export default function Home({ disneyVideos }) {
+export default function Home({
+  disneyVideos,
+  travelVideos,
+  productivityVideos,
+  popularVideos,
+}) {
   // const disneyVideos = [
   //   {
   //     imgUrl: "/static/clifford.webp",
@@ -40,20 +47,28 @@ export default function Home({ disneyVideos }) {
       </Head>
       {/* <h1>Netflix</h1> */}
       {/* Navbar */}
-      <Navbar username="whd793@gmail.com" />
-      {/* Banner */}
-      <Banner
-        title="Clifford the red dog"
-        subTitle="a very cute dog"
-        imgUrl="/static/clifford.webp"
-      />
-      <div className={styles.sectionWrapper}>
-        <SectionCards title="Disney" videos={disneyVideos} size="large" />
-        <SectionCards title="Disney" videos={disneyVideos} size="medium" />
-      </div>
-      {/* <Card imgUrl="/static/clifford.webp" size="large" />
+      <div className={styles.main}>
+        <Navbar username="whd793@gmail.com" />
+        {/* Banner */}
+        <Banner
+          title="Clifford the red dog"
+          subTitle="a very cute dog"
+          imgUrl="/static/clifford.webp"
+        />
+        <div className={styles.sectionWrapper}>
+          <SectionCards title="Disney" videos={disneyVideos} size="large" />
+          <SectionCards title="Travel" videos={travelVideos} size="small" />
+          <SectionCards
+            title="Productivity"
+            videos={productivityVideos}
+            size="small"
+          />
+          {/* <SectionCards title="Popular" videos={disneyVideos} size="small" /> */}
+        </div>
+        {/* <Card imgUrl="/static/clifford.webp" size="large" />
       <Card imgUrl="/static/clifford.webp" size="medium" />
       <Card imgUrl="/static/clifford.webp" size="small" /> */}
+      </div>
     </div>
   );
 }
